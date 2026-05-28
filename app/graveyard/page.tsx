@@ -12,7 +12,7 @@ export default async function GraveyardPage() {
   const supabase = createServerSupabaseClient()
   const { data: stories } = await supabase
     .from('stories')
-    .select(`*, profile:profiles(username, display_name), source:sources(name, domain, credibility_score)`)
+    .select(`*, profile:profiles!submitted_by(username, display_name), source:sources(name, domain, credibility_score)`)
     .eq('status', 'graveyard')
     .order('reviewed_at', { ascending: false })
 

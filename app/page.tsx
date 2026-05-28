@@ -42,7 +42,7 @@ export default async function HomePage({
     .from('stories')
     .select(`
       *,
-      profile:profiles(username, display_name, avatar_url, karma, alpha_count, twitter_handle, bluesky_handle),
+      profile:profiles!submitted_by(username, display_name, avatar_url, karma, alpha_count, twitter_handle, bluesky_handle),
       source:sources(name, domain, logo_url, credibility_score),
       narrative:narratives(title, slug)
     `)

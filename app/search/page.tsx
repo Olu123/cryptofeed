@@ -10,7 +10,7 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
 
   const { data: stories } = q ? await supabase
     .from('stories')
-    .select(`*, profile:profiles(username, display_name, avatar_url, karma, alpha_count, twitter_handle, bluesky_handle), source:sources(name, domain, logo_url, credibility_score), narrative:narratives(title, slug)`)
+    .select(`*, profile:profiles!submitted_by(username, display_name, avatar_url, karma, alpha_count, twitter_handle, bluesky_handle), source:sources(name, domain, logo_url, credibility_score), narrative:narratives(title, slug)`)
     .eq('status', 'approved')
     .textSearch('title', q, { type: 'websearch', config: 'english' })
     .order('hot_score', { ascending: false })

@@ -65,7 +65,7 @@ export async function GET(request: Request) {
     .from('stories')
     .select(`id, title, url, domain, summary, category, news_type, credibility_score, upvotes, downvotes, comment_count, hot_score, published_at,
       source:sources(name, domain, credibility_score),
-      profile:profiles(username, display_name, twitter_handle, bluesky_handle)`)
+      profile:profiles!submitted_by(username, display_name, twitter_handle, bluesky_handle)`)
     .eq('status', 'approved')
 
   if (category) query = query.eq('category', category)

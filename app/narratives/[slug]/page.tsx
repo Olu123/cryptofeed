@@ -12,7 +12,7 @@ export default async function NarrativePage({ params }: { params: { slug: string
 
   const { data: stories } = await supabase
     .from('stories')
-    .select(`*, profile:profiles(username, display_name, avatar_url, karma, alpha_count, twitter_handle, bluesky_handle), source:sources(name, domain, logo_url, credibility_score)`)
+    .select(`*, profile:profiles!submitted_by(username, display_name, avatar_url, karma, alpha_count, twitter_handle, bluesky_handle), source:sources(name, domain, logo_url, credibility_score)`)
     .eq('narrative_id', narrative.id)
     .eq('status', 'approved')
     .order('published_at', { ascending: true })

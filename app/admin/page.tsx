@@ -19,12 +19,12 @@ export default async function AdminPage() {
 
   const [{ data: pending }, { data: flagged }, { data: recentLogs }] = await Promise.all([
     supabase.from('stories')
-      .select(`*, profile:profiles(username, display_name), source:sources(name, credibility_score)`)
+      .select(`*, profile:profiles!submitted_by(username, display_name), source:sources(name, credibility_score)`)
       .eq('status', 'pending')
       .order('created_at', { ascending: true })
       .limit(50),
     supabase.from('stories')
-      .select(`*, profile:profiles(username, display_name), source:sources(name, credibility_score)`)
+      .select(`*, profile:profiles!submitted_by(username, display_name), source:sources(name, credibility_score)`)
       .eq('status', 'approved')
       .gt('flagged_count', 0)
       .order('flagged_count', { ascending: false })

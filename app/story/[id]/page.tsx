@@ -20,7 +20,7 @@ export default async function StoryPage({ params, searchParams }: {
     .from('stories')
     .select(`
       *,
-      profile:profiles(username, display_name, avatar_url, karma, alpha_count, role, twitter_handle, bluesky_handle),
+      profile:profiles!submitted_by(username, display_name, avatar_url, karma, alpha_count, role, twitter_handle, bluesky_handle),
       source:sources(name, domain, logo_url, credibility_score, twitter_handle, bluesky_handle),
       narrative:narratives(title, slug, description, story_count)
     `)

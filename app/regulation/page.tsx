@@ -22,7 +22,7 @@ export default async function RegulationPage() {
   const supabase = createServerSupabaseClient()
   const { data: stories } = await supabase
     .from('stories')
-    .select(`*, profile:profiles(username, display_name, avatar_url, karma, alpha_count, twitter_handle, bluesky_handle), source:sources(name, domain, logo_url, credibility_score)`)
+    .select(`*, profile:profiles!submitted_by(username, display_name, avatar_url, karma, alpha_count, twitter_handle, bluesky_handle), source:sources(name, domain, logo_url, credibility_score)`)
     .eq('status', 'approved')
     .eq('category', 'regulation')
     .order('published_at', { ascending: false })
