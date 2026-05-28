@@ -11,7 +11,7 @@ export async function GET() {
     .limit(50)
 
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://cryptofeed.app'
-  const items = (stories ?? []).map(s => `
+  const items = (stories ?? []).map((s: { id: string; title: string; url: string; summary: string | null; published_at: string }) => `
     <item>
       <title><![CDATA[${s.title}]]></title>
       <link>${s.url}</link>
