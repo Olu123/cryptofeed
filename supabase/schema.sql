@@ -1,5 +1,5 @@
 -- ============================================================
--- CryptoFeed Database Schema
+-- CryptoVibes Database Schema
 -- ============================================================
 
 -- Enable extensions

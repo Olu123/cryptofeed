@@ -1,4 +1,4 @@
-# 🚀 CryptoFeed — Deploy Guide
+# 🚀 CryptoVibes — Deploy Guide
 
 **Zero cost to launch. Live in under 30 minutes.**
 
@@ -15,11 +15,11 @@
 ## Step 1 — Push to GitHub
 
 ```bash
-cd cryptofeed
+cd cryptovibes
 git init
 git add .
-git commit -m "Initial CryptoFeed commit"
-gh repo create cryptofeed --public --push
+git commit -m "Initial CryptoVibes commit"
+gh repo create cryptovibes --public --push
 ```
 
 ---
@@ -27,7 +27,7 @@ gh repo create cryptofeed --public --push
 ## Step 2 — Supabase Setup (10 min)
 
 1. Go to **supabase.com** → New Project
-2. Name it `cryptofeed`, choose nearest region
+2. Name it `cryptovibes`, choose nearest region
 3. Save your database password somewhere safe
 4. Go to **SQL Editor** → paste the entire contents of `supabase/schema.sql` → Run
 5. Go to **Settings → API**:
@@ -65,7 +65,7 @@ AGGREGATE_SECRET=any-random-secret-string-here
 ## Step 4 — Stripe Setup (5 min)
 
 1. Go to **dashboard.stripe.com** → Products → Create product:
-   - Name: `CryptoFeed Pro`
+   - Name: `CryptoVibes Pro`
    - Price: `$7.00/month`
    - Copy the **Price ID** → `STRIPE_PRO_PRICE_ID`
 2. Go to **Webhooks** → Add endpoint:
@@ -156,9 +156,9 @@ Go live at `/pro` — the Stripe checkout is already wired up.
 
 Register these handles **immediately** (don't wait for traffic):
 
-- **X/Twitter**: @cryptofeedapp (or your brand name)
-- **Bluesky**: cryptofeed.bsky.social
-- **Telegram**: t.me/cryptofeed (announcement channel)
+- **X/Twitter**: @cryptovibesapp (or your brand name)
+- **Bluesky**: cryptovibes.bsky.social
+- **Telegram**: t.me/cryptovibes (announcement channel)
 
 Update `app/layout.tsx` with your actual handles.
 
@@ -167,7 +167,7 @@ Update `app/layout.tsx` with your actual handles.
 ## Custom Domain (Free via Vercel)
 
 1. Vercel Dashboard → your project → Settings → Domains
-2. Add your domain (e.g., `cryptofeed.xyz` — available on Namecheap for ~$1)
+2. Add your domain (e.g., `cryptovibes.xyz` — available on Namecheap for ~$1)
 3. Point DNS to Vercel's nameservers
 
 ---
@@ -201,7 +201,7 @@ GitHub Actions Cron (every 15 min)
 ## File Structure
 
 ```
-cryptofeed/
+cryptovibes/
 ├── app/                    Next.js App Router pages
 │   ├── page.tsx            Main feed (Hot/New/Top + filters)
 │   ├── submit/             Story submission
@@ -227,7 +227,7 @@ cryptofeed/
 
 ## What Makes This Different
 
-| Feature | CoinDesk | CryptoPanic | Reddit | **CryptoFeed** |
+| Feature | CoinDesk | CryptoPanic | Reddit | **CryptoVibes** |
 |---|---|---|---|---|
 | Credibility scoring | ✗ | ✗ | ✗ | ✅ |
 | Misinformation archive | ✗ | ✗ | ✗ | ✅ |
@@ -246,5 +246,5 @@ cryptofeed/
 Built with Next.js 14 · Supabase · Tailwind CSS · Stripe  
 Zero infrastructure cost on free tiers.
 
-Connect on X: [@cryptofeedapp](https://x.com/cryptofeedapp)  
-Connect on Bluesky: [cryptofeed.bsky.social](https://bsky.app/profile/cryptofeed.bsky.social)
+Connect on X: [@cryptovibesapp](https://x.com/cryptovibesapp)  
+Connect on Bluesky: [cryptovibes.bsky.social](https://bsky.app/profile/cryptovibes.bsky.social)
