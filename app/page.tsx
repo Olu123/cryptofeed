@@ -94,12 +94,20 @@ export default async function HomePage({
     <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-8">
       {/* Main Feed */}
       <div>
-        {/* A-ADS Ad Unit 2439535 */}
-        <div className="mb-4" style={{ width: '728px', maxWidth: '100%', margin: '0 auto 1rem' }}>
+        {/* A-ADS — Desktop (728x90) */}
+        <div className="hidden sm:block mb-4" style={{ width: '728px', maxWidth: '100%', margin: '0 auto 1rem' }}>
           <iframe
             data-aa='2439535'
             src='//ad.a-ads.com/2439535/?size=728x90'
             style={{ border: 0, padding: 0, width: '728px', maxWidth: '100%', height: '90px', overflow: 'hidden', display: 'block', margin: 'auto' }}
+          />
+        </div>
+        {/* A-ADS — Mobile (320x50) */}
+        <div className="block sm:hidden mb-4" style={{ width: '320px', maxWidth: '100%', margin: '0 auto 1rem' }}>
+          <iframe
+            data-aa='2439555'
+            src='//ad.a-ads.com/2439555/?size=320x50'
+            style={{ border: 0, padding: 0, width: '320px', maxWidth: '100%', height: '50px', overflow: 'hidden', display: 'block', margin: 'auto' }}
           />
         </div>
 
