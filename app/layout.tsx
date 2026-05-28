@@ -3,12 +3,12 @@ import './globals.css'
 import Navbar from '@/components/Navbar'
 
 export const metadata: Metadata = {
-  title: { default: 'CryptoVibes — Credible Crypto News', template: '%s | CryptoVibes' },
+  title: { default: 'CryptoVibes — Credible Rundown of Daily Crypto News', template: '%s | CryptoVibes' },
   description: 'The most credible crypto and blockchain news aggregator. User-submitted, community-ranked, truth-scored.',
   keywords: ['crypto news', 'blockchain news', 'bitcoin', 'ethereum', 'defi', 'web3'],
   openGraph: {
     type: 'website',
-    title: 'CryptoVibes — Credible Crypto News',
+    title: 'CryptoVibes — Credible Rundown of Daily Crypto News',
     description: 'User-submitted, community-ranked, truth-scored crypto news.',
     images: [{ url: '/og-image.png' }],
   },
