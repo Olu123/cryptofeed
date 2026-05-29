@@ -61,7 +61,7 @@ export async function POST(request: Request) {
           lc.includes('exchange') || lc.includes('binance') || lc.includes('coinbase') ? 'exchange' :
           'other'
 
-        const { error: insertError } = await supabase.from('stories').insert({
+        const { data: insertedStory, error: insertError } = await supabase.from('stories').insert({
           title: cleanTitle,
           url: link,
           domain,
@@ -74,15 +74,12 @@ export async function POST(request: Request) {
           is_auto_aggregated: true,
           original_language: feed.source?.language ?? 'en',
           published_at: pubDate ? new Date(pubDate).toISOString() : new Date().toISOString(),
-        })
+        }).select('id').single()
 
-        if (!insertError) {
+        if (!insertError && insertedStory) {
           inserted++
-          // Capture the very first new story for social posting
           if (!firstNewStory) {
-            const { data: newStory } = await supabase
-              .from('stories').select('id').eq('url', link).single()
-            if (newStory) firstNewStory = { id: newStory.id, title: cleanTitle, url: link }
+            firstNewStory = { id: insertedStory.id, title: cleanTitle, url: link }
           }
         }
       }
@@ -97,9 +94,18 @@ export async function POST(request: Request) {
     }
   }
 
-  // Post one new story to X and Bluesky
-  if (firstNewStory) {
-    await announceStory(firstNewStory.title, firstNewStory.url, firstNewStory.id)
+  // Post one story to X and Bluesky — new story if available, otherwise latest from DB
+  let toAnnounce = firstNewStory
+  if (!toAnnounce) {
+    const { data: latest } = await supabase
+      .from('stories').select('id, title, url')
+      .eq('status', 'approved')
+      .order('published_at', { ascending: false })
+      .limit(1).single()
+    if (latest) toAnnounce = latest
+  }
+  if (toAnnounce) {
+    await announceStory(toAnnounce.title, toAnnounce.url, toAnnounce.id)
   }
 
   return NextResponse.json({ inserted, errors, feeds_processed: (feeds ?? []).length, announced: firstNewStory?.title ?? null })
