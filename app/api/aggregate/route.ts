@@ -45,7 +45,14 @@ export async function POST(request: Request) {
 
         const cleanTitle = title.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&#039;/g, "'").trim()
         const cleanSummary = description?.replace(/<[^>]+>/g, '').replace(/&amp;/g, '&').substring(0, 400)
-        const domain = (() => { try { return new URL(link).hostname.replace('www.', '') } catch { return '' } })()
+        // Normalize URL: strip trailing slash and query params to prevent near-duplicates
+        const normalizedLink = (() => {
+          try {
+            const u = new URL(link)
+            return `${u.origin}${u.pathname}`.replace(/\/$/, '')
+          } catch { return link }
+        })()
+        const domain = (() => { try { return new URL(normalizedLink).hostname.replace('www.', '') } catch { return '' } })()
 
         // Auto-categorize based on title keywords
         const lc = cleanTitle.toLowerCase()
@@ -63,7 +70,7 @@ export async function POST(request: Request) {
 
         const { data: insertedStory, error: insertError } = await supabase.from('stories').insert({
           title: cleanTitle,
-          url: link,
+          url: normalizedLink,
           domain,
           summary: cleanSummary || null,
           category,
@@ -79,7 +86,7 @@ export async function POST(request: Request) {
         if (!insertError && insertedStory) {
           inserted++
           if (!firstNewStory) {
-            firstNewStory = { id: insertedStory.id, title: cleanTitle, url: link }
+            firstNewStory = { id: insertedStory.id, title: cleanTitle, url: normalizedLink }
           }
         }
       }
