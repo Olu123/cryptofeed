@@ -1,5 +1,6 @@
 import { createAdminClient } from '@/lib/supabase-server'
 import { NextResponse } from 'next/server'
+import { announceStory } from '@/lib/social'
 
 export const maxDuration = 60
 
@@ -18,6 +19,7 @@ export async function POST(request: Request) {
 
   let inserted = 0
   const errors: string[] = []
+  let firstNewStory: { id: string; title: string; url: string } | null = null
 
   for (const feed of feeds ?? []) {
     try {
@@ -74,7 +76,15 @@ export async function POST(request: Request) {
           published_at: pubDate ? new Date(pubDate).toISOString() : new Date().toISOString(),
         })
 
-        if (!insertError) inserted++
+        if (!insertError) {
+          inserted++
+          // Capture the very first new story for social posting
+          if (!firstNewStory) {
+            const { data: newStory } = await supabase
+              .from('stories').select('id').eq('url', link).single()
+            if (newStory) firstNewStory = { id: newStory.id, title: cleanTitle, url: link }
+          }
+        }
       }
 
       await supabase.from('rss_feeds').update({
@@ -87,5 +97,10 @@ export async function POST(request: Request) {
     }
   }
 
-  return NextResponse.json({ inserted, errors, feeds_processed: (feeds ?? []).length })
+  // Post one new story to X and Bluesky
+  if (firstNewStory) {
+    await announceStory(firstNewStory.title, firstNewStory.url, firstNewStory.id)
+  }
+
+  return NextResponse.json({ inserted, errors, feeds_processed: (feeds ?? []).length, announced: firstNewStory?.title ?? null })
 }
