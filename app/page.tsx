@@ -31,7 +31,7 @@ export default async function HomePage({
   const supabase = createServerSupabaseClient()
   const { data: { user } } = await supabase.auth.getUser()
 
-  const sort = searchParams.sort ?? 'hot'
+  const sort = searchParams.sort ?? 'new'
   const category = searchParams.category ?? ''
   const type = searchParams.type ?? ''
   const page = parseInt(searchParams.page ?? '1', 10)
