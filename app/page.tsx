@@ -82,6 +82,17 @@ export default async function HomePage({
   const regular = storiesWithVotes.filter(s => !s.is_pinned)
   const sorted = [...pinned, ...regular]
 
+  // Story of the Day — highest credibility story from last 24 hours
+  const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
+  const { data: storyOfDay } = await supabase
+    .from('stories')
+    .select(`*, source:sources(name, domain, credibility_score)`)
+    .eq('status', 'approved')
+    .gte('published_at', yesterday)
+    .order('credibility_score', { ascending: false })
+    .limit(1)
+    .single()
+
   // Fetch trending narratives for sidebar
   const { data: narratives } = await supabase
     .from('narratives')
@@ -110,6 +121,39 @@ export default async function HomePage({
             style={{ border: 0, padding: 0, width: '320px', maxWidth: '100%', height: '50px', overflow: 'hidden', display: 'block', margin: 'auto' }}
           />
         </div>
+
+        {/* Story of the Day */}
+        {storyOfDay && page === 1 && !category && !type && (
+          <div className="mb-5 rounded-xl overflow-hidden border border-brand-300 dark:border-brand-800 bg-gradient-to-br from-brand-50 to-orange-50 dark:from-brand-900/20 dark:to-orange-900/10">
+            <div className="px-4 py-2 bg-brand-500 flex items-center gap-2">
+              <span className="text-white text-xs font-bold uppercase tracking-widest">⭐ Story of the Day</span>
+              <span className="ml-auto text-brand-100 text-xs">Highest credibility in the last 24h</span>
+            </div>
+            <div className="p-5">
+              <Link href={`/story/${storyOfDay.id}`}
+                className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white hover:text-brand-600 dark:hover:text-brand-400 transition-colors leading-snug block mb-2">
+                {storyOfDay.title}
+              </Link>
+              {storyOfDay.summary && (
+                <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-2 mb-3">
+                  {storyOfDay.summary}
+                </p>
+              )}
+              <div className="flex items-center gap-3 text-xs text-gray-500 flex-wrap">
+                {storyOfDay.source && (
+                  <span className="font-medium text-gray-700 dark:text-gray-300">{storyOfDay.source.name}</span>
+                )}
+                <span className="badge bg-green-100 text-green-700">
+                  ✓ Credibility {storyOfDay.credibility_score}/100
+                </span>
+                <a href={storyOfDay.url} target="_blank" rel="noopener noreferrer"
+                  className="ml-auto text-brand-500 hover:underline font-medium">
+                  Read full story ↗
+                </a>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Filter bar */}
         <div className="flex flex-col gap-2 mb-4">
