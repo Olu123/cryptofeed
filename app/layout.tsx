@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import Navbar from '@/components/Navbar'
+import PriceTicker from '@/components/PriceTicker'
 
 export const metadata: Metadata = {
   title: { default: 'CryptoVibes — Credible Rundown of Daily Crypto News', template: '%s | CryptoVibes' },
@@ -37,6 +38,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         `}} />
       </head>
       <body className="min-h-screen bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100">
+        <PriceTicker />
         <Navbar />
         <main className="max-w-7xl mx-auto px-4 py-6">
           {children}
